@@ -12,3 +12,13 @@ output "private_subnet_ids" {
   description = "List of IDs of private subnets."
   value       = aws_subnet.private[*].id
 }
+
+output "availability_zones" {
+  description = "List of availability zones."
+  value       = var.availability_zones
+}
+
+output "internet_gateway_id" {
+  description = "ID of the internet gateway."
+  value       = aws_internet_gateway.gw.id
+}

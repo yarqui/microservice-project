@@ -32,3 +32,12 @@ module "ecr" {
   scan_on_push = true
 }
 
+module "eks" {
+  source          = "./modules/eks"          
+  cluster_name    = "yar-eks-cluster-demo"            
+  subnet_ids      = module.vpc.private_subnet_ids     
+  instance_type   = "t2.micro"                    
+  desired_size    = 1                             
+  max_size        = 2                             
+  min_size        = 1                             
+}
