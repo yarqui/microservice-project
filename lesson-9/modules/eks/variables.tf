@@ -10,7 +10,6 @@ variable "vpc_id" {
 variable "private_subnets" {
   type = list(string)
 }
-# Add this new variable
 variable "public_subnets" {
   type = list(string)
 }

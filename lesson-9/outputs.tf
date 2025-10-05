@@ -13,7 +13,6 @@ output "ecr_repository_url" {
   value       = module.ecr.repository_url
 }
 
-# --- Correct EKS Outputs ---
 output "eks_cluster_name" {
   description = "The name of the EKS cluster."
   value       = module.eks.cluster_name
