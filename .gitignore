@@ -210,6 +210,9 @@ __marimo__/
 *.tfstate
 *.tfstate.*
 
+# Terraform env vars
+terraform.tfvars
+
 # .terraform directory
 # This directory contains provider plugins and other local configuration.
 .terraform/
