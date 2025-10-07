@@ -103,6 +103,7 @@ module "jenkins" {
   github_user     = var.github_user
   github_pat      = var.github_pat
   github_repo_url = var.github_repo_url
+  ecr_repo_url    = module.ecr.repository_url
 
   depends_on = [
     aws_eks_addon.ebs_csi_driver

@@ -25,3 +25,8 @@ variable "github_pat" {
 variable "github_repo_url" {
   type = string
 }
+
+variable "ecr_repo_url" {
+  type        = string
+  description = "The URL of the ECR repository."
+}

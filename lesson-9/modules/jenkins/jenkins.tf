@@ -87,6 +87,7 @@ resource "helm_release" "jenkins" {
       github_user     = var.github_user
       github_pat      = var.github_pat
       github_repo_url = var.github_repo_url
+      ecr_url         = var.ecr_repo_url
     })
   ]
 }

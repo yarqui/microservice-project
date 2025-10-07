@@ -49,6 +49,14 @@ controller:
                 jenkinsUrl: "http://jenkins:8080"
                 containerCap: 10
 
+      global-node-properties: |
+        jenkins:
+          globalNodeProperties:
+          - envVars:
+              env:
+              - key: "ECR_URL"
+                value: "${ecr_url}"
+
       credentials: |
         credentials:
           system:
@@ -96,6 +104,3 @@ controller:
                   }
                 }
               }
-
-  jenkinsEnv:
-    ECR_URL: "$(aws ecr describe-repositories --repository-names lesson-9-django-app --query 'repositories[0].repositoryUri' --output text)"
