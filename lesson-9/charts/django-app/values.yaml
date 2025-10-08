@@ -35,10 +35,10 @@ resources:
 
 postgresql:
   enabled: true
-  image:
-    registry: docker.io
-    repository: "238611949808.dkr.ecr.us-east-1.amazonaws.com/lesson-9-django-app"
-    tag: latest
+  # image:
+  #   registry: docker.io
+  #   repository: "238611949808.dkr.ecr.us-east-1.amazonaws.com/lesson-9-django-app"
+  #   tag: latest
   auth:
     username: "django_user"
     password: "pass9764gd"
