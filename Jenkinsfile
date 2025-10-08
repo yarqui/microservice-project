@@ -51,6 +51,7 @@ spec:
             sh """
               set -ex
 
+              git config --global --add safe.directory /home/jenkins/agent/workspace/goit-django-docker
               git config --global user.email "${COMMIT_EMAIL}"
               git config --global user.name "${COMMIT_NAME}"
 
