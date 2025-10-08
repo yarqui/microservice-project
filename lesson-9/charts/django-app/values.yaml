@@ -1,9 +1,9 @@
 replicaCount: 1
 
 image:
-  repository: "placeholder"
+  repository: "238611949808.dkr.ecr.us-east-1.amazonaws.com/lesson-9-django-app"
   pullPolicy: IfNotPresent
-  tag: "latest"
+  tag: "v1.0.5"
 
 service:
   type: LoadBalancer
@@ -37,7 +37,7 @@ postgresql:
   enabled: true
   image:
     registry: docker.io
-    repository: bitnamisecure/postgresql
+    repository: "238611949808.dkr.ecr.us-east-1.amazonaws.com/lesson-9-django-app"
     tag: latest
   auth:
     username: "django_user"
