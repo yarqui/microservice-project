@@ -114,3 +114,15 @@ module "jenkins" {
     kubernetes = kubernetes
   }
 }
+
+module "argo_cd" {
+  source        = "./modules/argo_cd"
+  namespace     = "argocd"
+  chart_version = "5.46.4"
+
+  github_repo_url = var.github_repo_url
+  github_user     = var.github_user
+  github_pat      = var.github_pat
+  
+  depends_on    = [module.eks]
+}
