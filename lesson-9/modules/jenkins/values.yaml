@@ -101,7 +101,11 @@ controller:
                                   credentials("github-token")
                                 }
                                 branches("*/lesson-9")
-                                excludedUsers('Jenkins CI')
+                                extensions {
+                                  userExclusion {
+                                    excludedUsers('Jenkins CI')
+                                  }
+                                }
                               }
                             }
                           }
