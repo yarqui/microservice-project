@@ -110,3 +110,12 @@ controller:
                   }
                 }
               }
+
+      github-server-config: |
+        unclassified:
+          githubpluginconfig:
+            configs:
+            - name: "GitHub"
+              apiUrl: "https://api.github.com"
+              manageHooks: true
+              credentialsId: "github-token"
