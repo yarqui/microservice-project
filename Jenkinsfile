@@ -55,7 +55,7 @@ spec:
               git config --global user.email "${COMMIT_EMAIL}"
               git config --global user.name "${COMMIT_NAME}"
 
-              git checkout lesson-9
+              git checkout -- lesson-9
 
               sed -i "s|repository:.*|repository: \\"${ECR_URL}\\"|" ${CHART_VALUES_PATH}
 
