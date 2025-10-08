@@ -86,6 +86,12 @@ controller:
                   dsl {
                     text('''
                       pipelineJob("goit-django-docker") {
+                        properties {
+                          githubProjectUrl("${github_repo_url}")
+                        }
+                        triggers {
+                          githubPush()
+                        }
                         definition {
                           cpsScm {
                             scm {
