@@ -51,26 +51,25 @@ spec:
             sh """
               set -ex
 
-              git config --global --add safe.directory /home/jenkins/agent/workspace/goit-django-docker
-              git config --global user.email "${COMMIT_EMAIL}"
-              git config --global user.name "${COMMIT_NAME}"
+              # 1. Clone a fresh copy of the repository into a temp directory
+              git clone "https://${GITHUB_USER}:${GITHUB_PAT}@github.com/yarqui/microservice-project.git"
+              
+              # 2. Enter the cloned repository
+              cd microservice-project
+              
+              # 3. Configure git user for the commit
+              git config user.email "${COMMIT_EMAIL}"
+              git config user.name "${COMMIT_NAME}"
+              git checkout lesson-9
 
-              git checkout -- lesson-9
-
-              # Find the placeholder for the repository and replace the NEXT line. This is robust.
+              # 4. Use our robust sed commands to modify the values.yaml in the fresh clone
               sed -i "/# THIS-LINE-IS-MODIFIED-BY-JENKINS-REPOSITORY/{n; s|repository:.*|repository: \\"${ECR_URL}\\"|;}" "${CHART_VALUES_PATH}"
-
-              # Find the placeholder for the tag and replace the NEXT line. This is robust.
               sed -i "/# THIS-LINE-IS-MODIFIED-BY-JENKINS-TAG/{n; s|tag:.*|tag: \\"${IMAGE_TAG}\\"|;}" "${CHART_VALUES_PATH}"
               
+              # 5. Add, commit, and push the change. No need to check for diffs, as a new build always creates a new tag.
               git add ${CHART_VALUES_PATH}
-              
-              if ! git diff-index --quiet HEAD; then
-                git commit -m "ci: Update image to ${IMAGE_TAG} with robust script [skip ci]"
-                git push "https://${GITHUB_USER}:${GITHUB_PAT}@github.com/yarqui/microservice-project.git" HEAD:lesson-9
-              else
-                echo "No changes to commit."
-              fi
+              git commit -m "ci: Update image to ${IMAGE_TAG} [skip ci]"
+              git push origin lesson-9
             """
           }
         }
