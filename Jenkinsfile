@@ -57,16 +57,20 @@ spec:
 
               git checkout -- lesson-9
 
-              # Correctly indented sed command to target only the main image repository
-              sed -i 's|^  repository:.*|  repository: "${ECR_URL}"|' ${CHART_VALUES_PATH}
-
-              # Correctly indented awk command to target only the main image tag
-              awk -v tag="${IMAGE_TAG}" 'BEGIN{FS=OFS=": "} /^  tag:/ {\$2 = "\\"" tag "\\""} 1' ${CHART_VALUES_PATH} > ${CHART_VALUES_PATH}.tmp && mv ${CHART_VALUES_PATH}.tmp ${CHART_VALUES_PATH}
+              # Use a more robust awk script to modify the YAML file safely
+              # This script ensures we only modify the repository and tag under the top-level 'image:' key.
+              awk '
+                BEGIN { in_image_block = 0 }
+                /^image:/ { in_image_block = 1; print; next }
+                in_image_block && /^  repository:/ { print "  repository: \\"${ECR_URL}\\""; next }
+                in_image_block && /^  tag:/ { print "  tag: \\"${IMAGE_TAG}\\""; in_image_block = 0; next }
+                { print }
+              ' ${CHART_VALUES_PATH} > ${CHART_VALUES_PATH}.tmp && mv ${CHART_VALUES_PATH}.tmp ${CHART_VALUES_PATH}
               
               git add ${CHART_VALUES_PATH}
               
               if ! git diff-index --quiet HEAD; then
-                git commit -m "ci: Update image tag to ${IMAGE_TAG} and fix CI script [skip ci]"
+                git commit -m "ci: Update image tag to ${IMAGE_TAG} [skip ci]"
                 git push "https://${GITHUB_USER}:${GITHUB_PAT}@github.com/yarqui/microservice-project.git" HEAD:lesson-9
               else
                 echo "No changes to commit."
