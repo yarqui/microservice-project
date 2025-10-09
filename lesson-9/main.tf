@@ -56,11 +56,15 @@ module "vpc" {
   private_subnets      = ["10.0.4.0/24", "10.0.5.0/24", "10.0.6.0/24"]
   availability_zones   = ["us-east-1a", "us-east-1b", "us-east-1c"]
   vpc_name             = "lesson-9-vpc"
+
+  depends_on = [module.s3_backend] 
 }
 
 module "ecr" {
   source   = "./modules/ecr"
   ecr_name = "lesson-9-django-app"
+
+  depends_on = [module.s3_backend] 
 }
 
 module "eks" {
@@ -70,6 +74,8 @@ module "eks" {
   vpc_id          = module.vpc.vpc_id
   private_subnets = module.vpc.private_subnet_ids
   public_subnets  = module.vpc.public_subnet_ids
+
+  depends_on = [module.s3_backend] 
 }
 
 module "ebs_csi_driver_irsa" {
@@ -106,7 +112,8 @@ module "jenkins" {
   ecr_repo_url    = module.ecr.repository_url
 
   depends_on = [
-    aws_eks_addon.ebs_csi_driver
+    aws_eks_addon.ebs_csi_driver,
+    module.s3_backend
   ]
 
   providers = {
@@ -124,5 +131,8 @@ module "argo_cd" {
   github_user     = var.github_user
   github_pat      = var.github_pat
   
-  depends_on    = [module.eks]
+  depends_on    = [
+    module.eks,
+    module.s3_backend
+  ]
 }

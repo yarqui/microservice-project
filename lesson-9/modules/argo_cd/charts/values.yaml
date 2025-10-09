@@ -22,6 +22,3 @@ repositories:
     url: ${github_repo_url}
     username: ${github_user}
     password: ${github_pat}
-# repoConfig:
-#   insecure: "true"
-#   enableLfs: "true"
