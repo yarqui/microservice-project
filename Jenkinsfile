@@ -24,11 +24,11 @@ spec:
     }
   }
   environment {
-    IMAGE_NAME      = "lesson-9-django-app"
+    IMAGE_NAME      = "lesson-10-django-app"
     IMAGE_TAG       = "v1.0.${BUILD_NUMBER}"
     COMMIT_EMAIL    = "jenkins@example.com"
     COMMIT_NAME     = "Jenkins CI"
-    CHART_VALUES_PATH = "lesson-9/charts/django-app/values.yaml"
+    CHART_VALUES_PATH = "lesson-10/charts/django-app/values.yaml"
   }
   stages {
     stage('Build & Push Docker Image') {
@@ -60,7 +60,7 @@ spec:
               # 3. Configure git user for the commit
               git config user.email "${COMMIT_EMAIL}"
               git config user.name "${COMMIT_NAME}"
-              git checkout lesson-9
+              git checkout lesson-10
 
               # 4. Use our robust sed commands to modify the values.yaml in the fresh clone
               sed -i "/# THIS-LINE-IS-MODIFIED-BY-JENKINS-REPOSITORY/{n; s|repository:.*|repository: \\"${ECR_URL}\\"|;}" "${CHART_VALUES_PATH}"
@@ -69,7 +69,7 @@ spec:
               # 5. Add, commit, and push the change. No need to check for diffs, as a new build always creates a new tag.
               git add ${CHART_VALUES_PATH}
               git commit -m "ci: Update image to ${IMAGE_TAG} [skip ci]"
-              git push origin lesson-9
+              git push origin lesson-10
             """
           }
         }

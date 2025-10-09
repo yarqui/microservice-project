@@ -55,21 +55,21 @@ module "vpc" {
   public_subnets       = ["10.0.1.0/24", "10.0.2.0/24", "10.0.3.0/24"]
   private_subnets      = ["10.0.4.0/24", "10.0.5.0/24", "10.0.6.0/24"]
   availability_zones   = ["us-east-1a", "us-east-1b", "us-east-1c"]
-  vpc_name             = "lesson-9-vpc"
+  vpc_name             = "lesson-10-vpc"
 
   depends_on = [module.s3_backend] 
 }
 
 module "ecr" {
   source   = "./modules/ecr"
-  ecr_name = "lesson-9-django-app"
+  ecr_name = "lesson-10-django-app"
 
   depends_on = [module.s3_backend] 
 }
 
 module "eks" {
   source          = "./modules/eks"
-  cluster_name    = "lesson-9-cluster"
+  cluster_name    = "lesson-10-cluster"
   cluster_version = "1.30"
   vpc_id          = module.vpc.vpc_id
   private_subnets = module.vpc.private_subnet_ids
