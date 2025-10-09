@@ -1,4 +1,4 @@
-replicaCount: 1
+replicaCount: 2
 
 # ❗DON'T DELETE THE FOLLOWING TWO COMMENTS!
 image:
