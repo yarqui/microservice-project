@@ -57,20 +57,16 @@ spec:
 
               git checkout -- lesson-9
 
-              # Use a more robust awk script to modify the YAML file safely
-              # This script ensures we only modify the repository and tag under the top-level 'image:' key.
-              awk '
-                BEGIN { in_image_block = 0 }
-                /^image:/ { in_image_block = 1; print; next }
-                in_image_block && /^  repository:/ { print "  repository: \\"${ECR_URL}\\""; next }
-                in_image_block && /^  tag:/ { print "  tag: \\"${IMAGE_TAG}\\""; in_image_block = 0; next }
-                { print }
-              ' ${CHART_VALUES_PATH} > ${CHART_VALUES_PATH}.tmp && mv ${CHART_VALUES_PATH}.tmp ${CHART_VALUES_PATH}
+              # Find the placeholder for the repository and replace the NEXT line. This is robust.
+              sed -i "/# THIS-LINE-IS-MODIFIED-BY-JENKINS-REPOSITORY/{n; s|repository:.*|repository: \\"${ECR_URL}\\"|;}" "${CHART_VALUES_PATH}"
+
+              # Find the placeholder for the tag and replace the NEXT line. This is robust.
+              sed -i "/# THIS-LINE-IS-MODIFIED-BY-JENKINS-TAG/{n; s|tag:.*|tag: \\"${IMAGE_TAG}\\"|;}" "${CHART_VALUES_PATH}"
               
               git add ${CHART_VALUES_PATH}
               
               if ! git diff-index --quiet HEAD; then
-                git commit -m "ci: Update image tag to ${IMAGE_TAG} [skip ci]"
+                git commit -m "ci: Update image to ${IMAGE_TAG} with robust script [skip ci]"
                 git push "https://${GITHUB_USER}:${GITHUB_PAT}@github.com/yarqui/microservice-project.git" HEAD:lesson-9
               else
                 echo "No changes to commit."
