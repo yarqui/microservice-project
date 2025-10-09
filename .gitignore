@@ -239,3 +239,6 @@ override.tf.json
 # Ignore CLI configuration files
 .terraformrc
 terraform.rc
+
+project_context.txt
+generate_project_context.py
