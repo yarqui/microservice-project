@@ -37,7 +37,7 @@ postgresql:
   enabled: true
   image:
     registry: docker.io
-    repository: "238611949808.dkr.ecr.us-east-1.amazonaws.com/lesson-9-django-app"
+    repository: "bitnami/postgresql"
     tag: "15.5.0-debian-11-r0"
   auth:
     username: "django_user"
