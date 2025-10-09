@@ -61,7 +61,7 @@ spec:
               sed -i 's|^  repository:.*|  repository: "${ECR_URL}"|' ${CHART_VALUES_PATH}
 
               # Correctly indented awk command to target only the main image tag
-              awk -v tag="${IMAGE_TAG}" 'BEGIN{FS=OFS=": "} /^  tag:/ {$2 = "\\"" tag "\\""} 1' ${CHART_VALUES_PATH} > ${CHART_VALUES_PATH}.tmp && mv ${CHART_VALUES_PATH}.tmp ${CHART_VALUES_PATH}
+              awk -v tag="${IMAGE_TAG}" 'BEGIN{FS=OFS=": "} /^  tag:/ {\$2 = "\\"" tag "\\""} 1' ${CHART_VALUES_PATH} > ${CHART_VALUES_PATH}.tmp && mv ${CHART_VALUES_PATH}.tmp ${CHART_VALUES_PATH}
               
               git add ${CHART_VALUES_PATH}
               
