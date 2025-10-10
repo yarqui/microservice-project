@@ -156,18 +156,19 @@ module "database" {
   allowed_cidr_blocks   = [module.vpc.vpc_cidr_block]
 
   # --- Database Config (Conditionally set) ---
-  db_name               = var.deploy_aurora_database ? "django-db-aurora" : "django-db-rds"
+  db_name               = var.deploy_aurora_database ? "djangodbaurora" : "djangodbrds"
+
   db_username           = "django_user"
   db_password           = var.db_password
   engine                = var.deploy_aurora_database ? "aurora-postgresql" : "postgres"
-  engine_version        = var.deploy_aurora_database ? "14.6" : "14.5"
+  engine_version        = var.deploy_aurora_database ? "15.3" : "16.3"
   instance_class        = "db.t3.medium"
   
   # --- Parameters ---
   parameter_group_params = [
-    { name = "max_connections", value = var.deploy_aurora_database ? "300" : "150" },
-    { name = "log_statement", value = "ddl" },
-    { name = "work_mem", value = "65536" } # This is in KB
+    { name = "max_connections", value = var.deploy_aurora_database ? "300" : "150", apply_method = "pending-reboot" },
+    { name = "log_statement", value = "ddl", apply_method = "pending-reboot" },
+    { name = "work_mem", value = "65536", apply_method = "pending-reboot" } # Value is in KB
   ]
 
   tags = {

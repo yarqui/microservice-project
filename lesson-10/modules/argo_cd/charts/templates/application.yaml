@@ -18,13 +18,13 @@ spec:
         - name: "postgresql.enabled"
           value: "false" # Disable the in-cluster database
         - name: "config.POSTGRES_HOST"
-          value: "{{ .Values.db_host }}"
+          value: "{{ $.Values.db_host }}"
         - name: "config.POSTGRES_DB"
-          value: "{{ .Values.db_name }}"
+          value: "{{ $.Values.db_name }}"
         - name: "config.POSTGRES_USER"
-          value: "{{ .Values.db_user }}"
+          value: "{{ $.Values.db_user }}"
         - name: "config.POSTGRES_PASSWORD"
-          value: "{{ .Values.db_password }}"
+          value: "{{ $.Values.db_password }}"
   destination:
     server: {{ .destination.server }}
     namespace: {{ .destination.namespace }}
