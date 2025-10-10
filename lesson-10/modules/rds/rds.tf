@@ -1,5 +1,5 @@
 resource "aws_db_instance" "rds" {
-  count = var.use_aurora ? 0 : 1
+  count                  = var.use_aurora ? 0 : 1
 
   identifier             = var.db_name
   engine                 = var.engine

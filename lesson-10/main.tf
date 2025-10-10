@@ -165,7 +165,9 @@ module "database" {
   
   # --- Parameters ---
   parameter_group_params = [
-    { name = "max_connections", value = var.deploy_aurora_database ? "300" : "150" }
+    { name = "max_connections", value = var.deploy_aurora_database ? "300" : "150" },
+    { name = "log_statement", value = "ddl" },
+    { name = "work_mem", value = "65536" } # This is in KB
   ]
 
   tags = {
