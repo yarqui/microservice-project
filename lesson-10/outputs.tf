@@ -31,3 +31,12 @@ output "jenkins_namespace" {
   value = module.jenkins.jenkins_namespace
 }
 
+output "database_writer_endpoint" {
+  description = "The connection endpoint for the database writer instance."
+  value       = module.database.db_endpoint
+}
+
+output "database_reader_endpoints" {
+  description = "A list of connection endpoints for the read replicas (if Aurora is deployed)."
+  value       = module.database.db_reader_endpoints
+}

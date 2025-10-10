@@ -130,9 +130,46 @@ module "argo_cd" {
   github_repo_url = var.github_repo_url
   github_user     = var.github_user
   github_pat      = var.github_pat
+
+  db_host     = module.database.db_endpoint
+  db_name     = module.database.db_name
+  db_user     = "django_user" # The username is the same in config
+  db_password = var.db_password
   
   depends_on    = [
     module.eks,
     module.s3_backend
   ]
+}
+
+module "database" {
+  source = "./modules/rds"
+
+  # --- Architecture (Controlled by a single variable) ---
+  use_aurora            = var.deploy_aurora_database
+  aurora_replica_count  = 2 # This is ignored if use_aurora is false
+  
+  # --- Network ---
+  vpc_id                = module.vpc.vpc_id
+  private_subnet_ids    = module.vpc.private_subnet_ids
+  publicly_accessible   = false
+  allowed_cidr_blocks   = [module.vpc.vpc_cidr_block]
+
+  # --- Database Config (Conditionally set) ---
+  db_name               = var.deploy_aurora_database ? "django-db-aurora" : "django-db-rds"
+  db_username           = "django_user"
+  db_password           = var.db_password
+  engine                = var.deploy_aurora_database ? "aurora-postgresql" : "postgres"
+  engine_version        = var.deploy_aurora_database ? "14.6" : "14.5"
+  instance_class        = "db.t3.medium"
+  
+  # --- Parameters ---
+  parameter_group_params = [
+    { name = "max_connections", value = var.deploy_aurora_database ? "300" : "150" }
+  ]
+
+  tags = {
+    Project     = "Neoversity"
+    Environment = "Production"
+  }
 }
