@@ -6,7 +6,7 @@ image:
   repository: "238611949808.dkr.ecr.us-east-1.amazonaws.com/lesson-10-django-app"
   pullPolicy: IfNotPresent
   # THIS-LINE-IS-MODIFIED-BY-JENKINS-TAG
-  tag: "v1.0.4"
+  tag: "v1.0.5"
 
 service:
   type: LoadBalancer
