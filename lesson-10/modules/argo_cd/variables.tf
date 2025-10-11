@@ -32,23 +32,23 @@ variable "github_pat" {
   sensitive   = true
 }
 
-variable "db_host" {
-  description = "The database host endpoint."
-  type        = string
-}
+# variable "db_host" {
+#   description = "The database host endpoint."
+#   type        = string
+# }
 
-variable "db_user" {
-  description = "The database username."
-  type        = string
-}
+# variable "db_user" {
+#   description = "The database username."
+#   type        = string
+# }
 
-variable "db_password" {
-  description = "The database password."
-  type        = string
-  sensitive   = true
-}
+# variable "db_password" {
+#   description = "The database password."
+#   type        = string
+#   sensitive   = true
+# }
 
-variable "db_name" {
-  description = "The database name."
-  type        = string
-}
+# variable "db_name" {
+#   description = "The database name."
+#   type        = string
+# }

@@ -131,10 +131,10 @@ module "argo_cd" {
   github_user     = var.github_user
   github_pat      = var.github_pat
 
-  db_host     = module.database.db_endpoint
-  db_name     = module.database.db_name
-  db_user     = "django_user" # The username is the same in config
-  db_password = var.db_password
+  # db_host     = module.database.db_endpoint
+  # db_name     = module.database.db_name
+  # db_user     = "django_user" # The username is the same in config
+  # db_password = var.db_password
   
   depends_on    = [
     module.eks,
@@ -175,4 +175,27 @@ module "database" {
     Project     = "Neoversity"
     Environment = "Production"
   }
+}
+
+resource "kubernetes_secret" "db_credentials" {
+  metadata {
+    name      = "django-db-credentials"
+    namespace = "production" # The namespace where the app will be deployed
+  }
+
+  data = {
+    POSTGRES_HOST     = module.database.db_endpoint
+    POSTGRES_DB       = module.database.db_name
+    POSTGRES_USER     = "django_user"
+    POSTGRES_PASSWORD = var.db_password
+    # Add any other config that needs to be secret
+    POSTGRES_PORT     = tostring(module.database.db_port)
+  }
+
+  type = "Opaque"
+
+  # Ensure the namespace exists before creating the secret
+  depends_on = [
+    module.argo_cd 
+  ]
 }

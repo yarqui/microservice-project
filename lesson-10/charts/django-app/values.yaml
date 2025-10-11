@@ -20,11 +20,11 @@ autoscaling:
   targetCPUUtilizationPercentage: 70
 
 config:
-  POSTGRES_HOST: "{{ .Release.Name }}-postgresql"
-  POSTGRES_PORT: "5432"
-  POSTGRES_USER: "django_user"
-  POSTGRES_DB: "django_db"
-  POSTGRES_PASSWORD: "pass9764gd"
+  # POSTGRES_HOST: "{{ .Release.Name }}-postgresql"
+  # POSTGRES_PORT: "5432"
+  # POSTGRES_USER: "django_user"
+  # POSTGRES_DB: "django_db"
+  # POSTGRES_PASSWORD: "pass9764gd"
   DJANGO_SETTINGS_MODULE: "neoversity.settings"
   DEBUG: "True"
 
