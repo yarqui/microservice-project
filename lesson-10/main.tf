@@ -131,11 +131,6 @@ module "argo_cd" {
   github_user     = var.github_user
   github_pat      = var.github_pat
 
-  # db_host     = module.database.db_endpoint
-  # db_name     = module.database.db_name
-  # db_user     = "django_user" # The username is the same in config
-  # db_password = var.db_password
-  
   depends_on    = [
     module.eks,
     module.s3_backend
@@ -145,7 +140,7 @@ module "argo_cd" {
 module "database" {
   source = "./modules/rds"
 
-  # --- Architecture (Controlled by a single variable) ---
+  # --- Architecture ---
   use_aurora            = var.deploy_aurora_database
   aurora_replica_count  = 2 # This is ignored if use_aurora is false
   
@@ -155,7 +150,7 @@ module "database" {
   publicly_accessible   = false
   allowed_cidr_blocks   = [module.vpc.vpc_cidr_block]
 
-  # --- Database Config (Conditionally set) ---
+  # --- Database Config ---
   db_name               = var.deploy_aurora_database ? "djangodbaurora" : "djangodbrds"
 
   db_username           = "django_user"
@@ -180,7 +175,7 @@ module "database" {
 resource "kubernetes_secret" "db_credentials" {
   metadata {
     name      = "django-db-credentials"
-    namespace = "production" # The namespace where the app will be deployed
+    namespace = "production" 
   }
 
   data = {
@@ -188,7 +183,6 @@ resource "kubernetes_secret" "db_credentials" {
     POSTGRES_DB       = module.database.db_name
     POSTGRES_USER     = "django_user"
     POSTGRES_PASSWORD = var.db_password
-    # Add any other config that needs to be secret
     POSTGRES_PORT     = tostring(module.database.db_port)
   }
 

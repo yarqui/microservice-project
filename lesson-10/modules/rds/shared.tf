@@ -10,7 +10,6 @@ locals {
   )
 }
 
-# DB Subnet Group
 resource "aws_db_subnet_group" "main" {
   name       = "${var.db_name}-sng"
   subnet_ids = var.publicly_accessible ? var.public_subnet_ids : var.private_subnet_ids
@@ -18,7 +17,6 @@ resource "aws_db_subnet_group" "main" {
   tags = local.common_tags
 }
 
-# Security Group
 resource "aws_security_group" "rds_sg" {
   name        = "${var.db_name}-sg"
   description = "Allow traffic to RDS/Aurora instance"
@@ -42,7 +40,6 @@ resource "aws_security_group" "rds_sg" {
   tags = local.common_tags
 }
 
-# Parameter Groups
 resource "aws_db_parameter_group" "rds_params" {
   count  = var.use_aurora ? 0 : 1
   name   = "${var.db_name}-rds-pg"

@@ -19,16 +19,9 @@ resource "helm_release" "argo_apps" {
 
   values = [
     templatefile("${path.module}/charts/values.yaml", {
-      # Git repo details
       github_repo_url = var.github_repo_url
       github_user     = var.github_user
       github_pat      = var.github_pat
-
-      # # Database details that will be passed to the template
-      # db_host     = var.db_host
-      # db_name     = var.db_name
-      # db_user     = var.db_user
-      # db_password = var.db_password
     })
   ]
 
