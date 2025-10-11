@@ -1,6 +1,6 @@
 output "db_endpoint" {
   description = "The connection endpoint for the database writer instance."
-  value       = try(aws_db_instance.rds[0].endpoint, aws_rds_cluster.aurora[0].endpoint)
+  value       = try(aws_db_instance.rds[0].address, aws_rds_cluster.aurora[0].endpoint)
 }
 
 output "db_reader_endpoints" {

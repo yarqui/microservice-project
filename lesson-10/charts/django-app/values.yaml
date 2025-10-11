@@ -37,7 +37,7 @@ resources:
     memory: 256Mi
 
 postgresql:
-  enabled: true
+  enabled: false
   image:
     registry: public.ecr.aws
     repository: "bitnami/postgresql"
