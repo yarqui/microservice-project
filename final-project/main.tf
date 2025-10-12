@@ -188,10 +188,21 @@ module "database" {
   }
 }
 
+resource "kubernetes_namespace" "production" {
+  metadata {
+    name = "production"
+  }
+
+  depends_on = [
+    module.argo_cd,
+    module.eks
+  ]
+}
+
 resource "kubernetes_secret" "db_credentials" {
   metadata {
     name      = "django-db-credentials"
-    namespace = "production" 
+    namespace = kubernetes_namespace.production.metadata[0].name
   }
 
   data = {
@@ -204,8 +215,7 @@ resource "kubernetes_secret" "db_credentials" {
 
   type = "Opaque"
 
-  # Ensure the namespace exists before creating the secret
   depends_on = [
-    module.argo_cd 
+    kubernetes_namespace.production
   ]
 }
