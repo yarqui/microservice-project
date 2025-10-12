@@ -17,6 +17,7 @@ When a developer pushes a code change, a GitHub webhook triggers a Jenkins pipel
 - **CD / GitOps Tool**: Argo CD
 - **Container Orchestration:** Kubernetes (AWS EKS)
 - **Package Management:** Helm
+- **Monitoring**: Prometheus & Grafana
 - **Application:** Django
 - **Database:** PostgreSQL (AWS RDS)
 
@@ -126,10 +127,10 @@ You can easily change the database architecture, size, and version by modifying 
 
 ## Project Structure
 
-The project is organized into `lesson-10/` for all infrastructure and Kubernetes code.
+The project is organized into `final-project/` for all infrastructure and Kubernetes code.
 
 ```
-lesson-10/
+final-project/
 ├── main.tf           # Main Terraform file to orchestrate all modules.
 ├── backend.tf          # Configuration for remote state with S3.
 ├── Jenkinsfile         # Declarative pipeline for the Jenkins CI job.
@@ -159,7 +160,7 @@ Follow these steps from the project's root directory.
 1.  Navigate to the Terraform directory:
 
     ```bash
-    cd lesson-10
+    cd final-project
     ```
 
 2.  Create the S3 Backend for Terraform State:
@@ -227,11 +228,11 @@ With the platform running and the webhook configured, the pipeline is now live.
 
 #### Trigger the Pipeline
 
-Make a small, harmless change to your code (e.g., add a comment in the `README.md`) and push it to your `lesson-10` branch.
+Make a small, harmless change to your code (e.g., add a comment in the `README.md`) and push it to your `final-project` branch.
 
 ```bash
 git commit -am "Triggering CI/CD pipeline"
-git push origin lesson-10
+git push origin final-project
 ```
 
 ---
@@ -273,6 +274,79 @@ kubectl get svc argocd-server -n argocd
 
 ---
 
+### Phase 4: Monitoring with Prometheus and Grafana
+
+The monitoring stack, consisting of Prometheus and Grafana, is automatically deployed. Here’s how to access and use it.
+
+---
+
+#### Accessing Prometheus
+
+Prometheus is used for collecting metrics from the Kubernetes cluster.
+
+1.  **Forward the Prometheus Server Port:**
+    Use `kubectl` to forward the port of the Prometheus server to your local machine.
+
+    ```bash
+    kubectl port-forward -n monitoring svc/prometheus-server 9090:80
+    ```
+
+2.  **Open the Prometheus UI:**
+    Open your web browser and navigate to `http://localhost:9090`. Here you can run PromQL queries and check the status of monitored targets.
+
+---
+
+#### Accessing and Configuring Grafana
+
+Grafana is used for visualizing the metrics collected by Prometheus.
+
+1.  **Get the Grafana Admin Password:**
+    The Grafana admin password is set to `admin123` in the Terraform module.
+
+2.  **Forward the Grafana Port:**
+    Use `kubectl` to forward the Grafana service port.
+
+    ```bash
+    kubectl port-forward svc/grafana 3000:80 -n monitoring
+    ```
+
+3.  **Log In to Grafana:**
+    -   Open your web browser and go to `http://localhost:3000`.
+    -   Log in with the username `admin` and the password `admin123`.
+
+---
+
+#### Adding Prometheus as a Data Source in Grafana
+
+Grafana needs to be configured to pull data from Prometheus.
+
+1.  **Navigate to Data Sources:**
+    In the Grafana UI, go to **Configuration (gear icon)** > **Data Sources**.
+
+2.  **Add Prometheus:**
+    -   Click **Add data source** and select **Prometheus**.
+    -   Set the **URL** to `http://prometheus-server.monitoring.svc:80`.
+    -   Leave the other settings as default and click **Save & test**. You should see a "Data source is working" message.
+
+---
+
+#### Importing a Kubernetes Dashboard
+
+Instead of building a dashboard from scratch, you can import a pre-built one.
+
+1.  **Find a Dashboard:**
+    Go to the [Grafana Dashboards](https://grafana.com/grafana/dashboards/) website and search for a Kubernetes dashboard. A popular one is **Kubernetes cluster monitoring (via Prometheus)** with ID `315`.
+
+2.  **Import the Dashboard:**
+    -   In the Grafana UI, go to **Dashboards (four squares icon)** > **Import**.
+    -   Enter the dashboard ID (e.g., `315`) and click **Load**.
+    -   In the next step, select your **Prometheus** data source from the dropdown menu.
+    -   Click **Import**.
+
+You should now have a comprehensive dashboard showing the health and performance of your EKS cluster.
+
+---
+
 ## Tearing Down the Infrastructure
 
 To avoid ongoing AWS costs, follow this safe, multi-step process to destroy all resources.
@@ -294,7 +368,7 @@ kubectl delete application django-app -n argocd
 This command will destroy the EKS cluster, VPC, ECR, Jenkins, and Argo CD itself.
 
 ```bash
-cd lesson-10
+cd final-project
 terraform destroy -auto-approve
 ```
 

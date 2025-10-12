@@ -4,8 +4,8 @@ applications:
     project: default
     source:
       repoURL: ${github_repo_url}
-      path: lesson-10/charts/django-app
-      targetRevision: lesson-10
+      path: final-project/charts/django-app
+      targetRevision: final-project
       helm:
         valueFiles:
           - values.yaml
