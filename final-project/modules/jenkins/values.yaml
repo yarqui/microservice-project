@@ -79,7 +79,7 @@ controller:
                       url('${github_repo_url}')
                       credentials('github-token')
                     }
-                    branches('*/final-project')
+                    branches('*/fp')
                   }
                 }
                 steps {
@@ -100,7 +100,7 @@ controller:
                                   url("${github_repo_url}")
                                   credentials("github-token")
                                 }
-                                branches("*/final-project")
+                                branches("*/fp")
                                 extensions {
                                   userExclusion {
                                     excludedUsers('Jenkins CI')
