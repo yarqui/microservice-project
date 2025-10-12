@@ -372,6 +372,6 @@ cd final-project
 terraform destroy -auto-approve
 ```
 
-Wait for this to complete.
+Done. Wait for this to complete.
 
 ---
