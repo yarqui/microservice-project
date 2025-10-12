@@ -228,11 +228,11 @@ With the platform running and the webhook configured, the pipeline is now live.
 
 #### Trigger the Pipeline
 
-Make a small, harmless change to your code (e.g., add a comment in the `README.md`) and push it to your `final-project` branch.
+Make a small, harmless change to your code (e.g., add a comment in the `README.md`) and push it to your `fp` branch.
 
 ```bash
 git commit -am "Triggering CI/CD pipeline"
-git push origin final-project
+git push origin fp
 ```
 
 ---

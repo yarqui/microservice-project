@@ -5,7 +5,7 @@ applications:
     source:
       repoURL: ${github_repo_url}
       path: final-project/charts/django-app
-      targetRevision: final-project
+      targetRevision: fp
       helm:
         valueFiles:
           - values.yaml

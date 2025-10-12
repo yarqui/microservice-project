@@ -60,7 +60,7 @@ spec:
               # 3. Configure git user for the commit
               git config user.email "${COMMIT_EMAIL}"
               git config user.name "${COMMIT_NAME}"
-              git checkout final-project
+              git checkout fp
 
               # 4. Use our robust sed commands to modify the values.yaml in the fresh clone
               sed -i "/# THIS-LINE-IS-MODIFIED-BY-JENKINS-REPOSITORY/{n; s|repository:.*|repository: \\"${ECR_URL}\\"|;}" "${CHART_VALUES_PATH}"
@@ -69,7 +69,7 @@ spec:
               # 5. Add, commit, and push the change. No need to check for diffs, as a new build always creates a new tag.
               git add ${CHART_VALUES_PATH}
               git commit -m "ci: Update image to ${IMAGE_TAG} [skip ci]"
-              git push origin final-project
+              git push origin fp
             """
           }
         }
