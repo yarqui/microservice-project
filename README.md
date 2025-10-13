@@ -349,29 +349,51 @@ You should now have a comprehensive dashboard showing the health and performance
 
 ## Tearing Down the Infrastructure
 
-To avoid ongoing AWS costs, follow this safe, multi-step process to destroy all resources.
+To avoid ongoing AWS costs and prevent dependency errors, follow this definitive **3-step teardown process**. This process is crucial because several services (Django, Jenkins, Argo CD) create AWS Load Balancers that must be deleted before the underlying network (VPC) can be destroyed.
 
 ---
 
-#### 1. Delete the Argo CD Application
+#### Step 1: Delete the GitOps-Managed Application (Django)
 
-This tells Argo CD to remove the Django application and its resources (Load Balancer, pods, etc.) from the production namespace.
+First, delete the Django application using `kubectl`. This tells Argo CD to remove the application, which in turn deletes the Kubernetes `Service` of type `LoadBalancer` and de-provisions the associated AWS Load Balancer.
 
 ```bash
 kubectl delete application django-app -n argocd
 ```
 
+Wait about 1-2 minutes for the AWS Load Balancer to be fully terminated before proceeding.
+
 ---
 
-#### 2. Destroy the Terraform Infrastructure
+#### Step 2: Destroy the Tooling Services (Jenkins & Argo CD)
 
-This command will destroy the EKS cluster, VPC, ECR, Jenkins, and Argo CD itself.
+Next, use a targeted Terraform command to destroy the Helm releases for Jenkins, Argo CD, and the monitoring stack. These services also create their own Load Balancers, which must be removed before destroying the VPC.
 
+Navigate to the Terraform directory:
 ```bash
 cd final-project
+```
+
+Then, run the targeted destroy command:
+```bash
+terraform destroy -auto-approve \
+  -target=module.jenkins \
+  -target=module.argo_cd \
+  -target=module.monitoring
+```
+
+This command specifically removes the tools and their AWS resources, releasing their lock on the network infrastructure.
+
+---
+
+#### Step 3: Destroy All Remaining Infrastructure
+
+With all Load Balancers gone, you can now safely destroy the rest of the AWS infrastructure, including the EKS cluster, VPC, RDS database, and ECR repository.
+
+```bash
 terraform destroy -auto-approve
 ```
 
-Done. Wait for this to complete.
+Following this multi-step process will ensure a clean and complete teardown of all resources, preventing the `DependencyViolation` errors.
 
 ---
