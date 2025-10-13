@@ -1,0 +1,24 @@
+applications:
+  - name: django-app
+    namespace: production
+    project: default
+    source:
+      repoURL: ${github_repo_url}
+      path: final-project/charts/django-app
+      targetRevision: fp
+      helm:
+        valueFiles:
+          - values.yaml
+    destination:
+      server: https://kubernetes.default.svc
+      namespace: production
+    syncPolicy:
+      automated:
+        prune: true
+        selfHeal: true
+
+repositories:
+  - name: microservice-project-repo
+    url: ${github_repo_url}
+    username: ${github_user}
+    password: ${github_pat}

@@ -1,0 +1,48 @@
+replicaCount: 2
+
+# ❗DON'T DELETE THE FOLLOWING TWO COMMENTS!
+image:
+  # THIS-LINE-IS-MODIFIED-BY-JENKINS-REPOSITORY
+  repository: "238611949808.dkr.ecr.us-east-1.amazonaws.com/final-project-django-app"
+  pullPolicy: IfNotPresent
+  # THIS-LINE-IS-MODIFIED-BY-JENKINS-TAG
+  tag: "v1.0.3"
+
+service:
+  type: LoadBalancer
+  port: 80
+  targetPort: 8000
+
+autoscaling:
+  enabled: true
+  minReplicas: 2
+  maxReplicas: 6
+  targetCPUUtilizationPercentage: 70
+
+config:
+  DJANGO_SETTINGS_MODULE: "neoversity.settings"
+  DEBUG: "True"
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 128Mi
+  limits:
+    cpu: 500m
+    memory: 256Mi
+
+postgresql:
+  enabled: false
+  image:
+    registry: public.ecr.aws
+    repository: "bitnami/postgresql"
+    tag: "15.5.0-debian-11-r0"
+  auth:
+    username: "django_user"
+    password: "pass9764gd"
+    database: "django_db"
+  primary:
+    persistence:
+      enabled: true
+      storageClass: "gp2"
+      size: 8Gi
